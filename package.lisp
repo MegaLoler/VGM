@@ -1,2 +1,3 @@
 (defpackage :vgm
-  (:use :cl))
+  (:use :cl)
+  (:export load-vgm-file))

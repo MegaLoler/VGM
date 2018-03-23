@@ -1,3 +1,4 @@
+
 (in-package :vgm)
 
 ;; copied from https://github.com/vgmrips/vgmplay/blob/master/VGMPlay/VGMFile.h
@@ -6,8 +7,11 @@
 (defconstant +fcc-vgm+ #x206d6756) ; "Vgm "
 (defconstant +fcc-gd3+ #x20336447) ; "Gd3 "
 
+(deftype fcc-vgm ()
+  `(eql ,+fcc-vgm+))
+
 (defstruct vgm-header
-  (fcc-vgm              0 :type (unsigned-byte 32))
+  (fcc-vgm              0 :type fcc-vgm)
   (lng-eof-offset       0 :type (unsigned-byte 32))
   (lng-version          0 :type (unsigned-byte 32))
   (lng-hz-psg           0 :type (unsigned-byte 32))
