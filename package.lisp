@@ -1,0 +1,2 @@
+(defpackage :vgm
+  (:use :cl))
