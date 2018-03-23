@@ -1,4 +1,3 @@
-
 (in-package :vgm)
 
 ;; copied from https://github.com/vgmrips/vgmplay/blob/master/VGMPlay/VGMFile.h

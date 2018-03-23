@@ -1,5 +1,19 @@
 (in-package :vgm)
 
+(defun load-file (filespec)
+  "Load a binary file into memory."
+  (with-open-file (input filespec
+			 :element-type '(unsigned-byte 8))
+    (loop
+       :with output = (make-array 0
+				  :element-type '(unsigned-byte 8)
+				  :adjustable t
+				  :fill-pointer 0)
+       :for byte = (read-byte input nil nil)
+       :while byte
+       :do (vector-push-extend byte output)
+       :finally (return output))))
+    
 (defun read-bytes (stream &optional (bytes 1) (endianness 'little))
   "Read a number of bytes from a stream."
   (declare (type (member little big) endianness))
@@ -14,8 +28,8 @@
 	       (read-byte stream))
      :finally (return data)))
 
-(defun read-vgm-file (stream)
-  "Read and parse vgm file data from a stream."
+(defun read-vgm-header (stream)
+  "Read a vgm header from a stream."
   (make-vgm-header
    :fcc-vgm              (read-bytes stream 4)
    :lng-eof-offset       (read-bytes stream 4)
@@ -87,11 +101,14 @@
    :byt-es-reserved      (read-bytes stream 1)
    :lng-hz-x1-010        (read-bytes stream 4)
    :lng-hz-c352          (read-bytes stream 4)
-   :lng-hz-ga20          (read-bytes stream 4)
-   ))
+   :lng-hz-ga20          (read-bytes stream 4)))
+
+(defun parse-vgm-file (data)
+  "Parse vgm file data.")
 
 (defun load-vgm-file (filespec)
   "Load a vgm file."
-  (with-open-file (stream filespec
-			  :element-type '(unsigned-byte 8))
-    (read-vgm-file stream)))
+  (let ((data (load-file filespec)))
+    (parse-vgm-file data)))
+
+;(load-file "test/song.vgm")
